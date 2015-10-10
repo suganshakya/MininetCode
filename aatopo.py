@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-#usage: mn --custom <path-to-file> --topo mytopo ....
+#usage: mn --custom <path-to-file> --topo aatopo,m,n,k ....
 
 from mininet.topo import Topo
 from mininet.net import Mininet
