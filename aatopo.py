@@ -1,4 +1,9 @@
+#! /usr/bin/python
+
+#usage: mn --custom <path-to-file> --topo mytopo ....
+
 from mininet.topo import Topo
+from mininet.net import Mininet
 
 class MyTopo(Topo):
     ""
@@ -7,28 +12,31 @@ class MyTopo(Topo):
             nAccess = number of access switch per aggregation switch
             nHost= no of host per access switch
         """    
-        
-        Topo.init(self, **opts)
-        aggreSwitchList = []
+   
+        Topo.__init__(self, **opts)
+        aggrSwitchList = []
         accessSwitchList = []
 
-        for i in irange(1,nAggr):
-            aggrSwitch = self.addSwitch('s%s' %i)
-
-            for j in irange(1,nAccess):
-                accessSwitch = self.addSwitch('s%js%i' %j %i)
+        for i in range(1, (nAggr+1)):
+            aggrSwitch = self.addSwitch('g%d' % i)
+	        lastAccessSwitch= None
+            
+	        for j in range(1, (nAccess+1)):
+    	        
+                accessSwitch = self.addSwitch('s%dg%d' % (j,i))
                 self.addLink(accessSwitch, aggrSwitch)
-                for k in irange(1, nHost):
-                    host = self.addHost('h%ks%js%i' %k %j %i)
+                for k in range(1, (nHost+1)):
+                    host = self.addHost('h%ds%dg%d' % (k, j, i))
                     self.addLink(host, accessSwitch)
-                for previousAccessSwitch in accessSwitchList:
-                    self.addLink(previousAccessSwitch, accessSwitch)
-                accessSwitchList.append(accesSwitch)
+
+		        if lastAccessSwitch:
+			        self.addLink(lastAccessSwitch,accessSwitch)
+		        lastAccessSwitch = accessSwitch
 
             for previousAggrSwitch in aggrSwitchList:
-                self.addList(previousAggrSwitch, aggrSwitch)
+                self.addLink(previousAggrSwitch, aggrSwitch)
             aggrSwitchList.append(aggrSwitch)
         
     
 
-topos = {'aatopo':(lambda:MyTopo())}
+topos = {'aatopo': MyTopo}
