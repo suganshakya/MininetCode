@@ -1,3 +1,5 @@
+from mininet.topo import Topo
+
 class MyTopo(Topo):
     ""
     def __init__(self, nAggr=2, nAccess=2, nHost=2, **opts):
@@ -5,7 +7,7 @@ class MyTopo(Topo):
             nAccess = number of access switch per aggregation switch
             nHost= no of host per access switch
         """    
-   
+        
         Topo.init(self, **opts)
         aggreSwitchList = []
         accessSwitchList = []
