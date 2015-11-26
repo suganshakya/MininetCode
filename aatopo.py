@@ -19,9 +19,9 @@ class MyTopo(Topo):
 
         for i in range(1, (nAggr+1)):
             aggrSwitch = self.addSwitch('g%d' % i)
-	        lastAccessSwitch= None
+	    	lastAccessSwitch= None
             
-	        for j in range(1, (nAccess+1)):
+	    	for j in range(1, (nAccess+1)):
     	        
                 accessSwitch = self.addSwitch('s%dg%d' % (j,i))
                 self.addLink(accessSwitch, aggrSwitch)
@@ -29,14 +29,12 @@ class MyTopo(Topo):
                     host = self.addHost('h%ds%dg%d' % (k, j, i))
                     self.addLink(host, accessSwitch)
 
-		        if lastAccessSwitch:
-			        self.addLink(lastAccessSwitch,accessSwitch)
-		        lastAccessSwitch = accessSwitch
+				if lastAccessSwitch:
+					self.addLink(lastAccessSwitch,accessSwitch)
+		    	lastAccessSwitch = accessSwitch
 
             for previousAggrSwitch in aggrSwitchList:
                 self.addLink(previousAggrSwitch, aggrSwitch)
             aggrSwitchList.append(aggrSwitch)
         
-    
-
 topos = {'aatopo': MyTopo}
